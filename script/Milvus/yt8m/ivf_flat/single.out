@@ -1,0 +1,16 @@
+Recall Rate 2      and 5   : 0.8824, QPS:   304.05, RES:   248.13 MB
+Recall Rate 2      and 8   : 0.9363, QPS:   296.64, RES:   248.13 MB
+Recall Rate 2      and 10  : 0.9540, QPS:   288.12, RES:   248.13 MB
+Recall Rate 2      and 15  : 0.9758, QPS:   272.32, RES:   248.13 MB
+Recall Rate 2      and 20  : 0.9845, QPS:   259.86, RES:   248.13 MB
+Recall Rate 2      and 30  : 0.9918, QPS:   233.98, RES:   248.13 MB
+Recall Rate 2      and 50  : 0.9964, QPS:   202.17, RES:   248.13 MB
+Recall Rate 2      and 100 : 0.9986, QPS:   157.74, RES:   248.13 MB
+Recall Rate 8      and 5   : 0.5362, QPS:   337.06, RES:   248.13 MB
+Recall Rate 8      and 8   : 0.6559, QPS:   329.09, RES:   248.13 MB
+Recall Rate 8      and 10  : 0.7101, QPS:   330.23, RES:   248.13 MB
+Recall Rate 8      and 15  : 0.7982, QPS:   324.77, RES:   248.13 MB
+Recall Rate 8      and 20  : 0.8489, QPS:   321.17, RES:   248.13 MB
+Recall Rate 8      and 30  : 0.9020, QPS:   311.08, RES:   248.13 MB
+Recall Rate 8      and 50  : 0.9451, QPS:   300.15, RES:   248.13 MB
+Recall Rate 8      and 100 : 0.9773, QPS:   273.92, RES:   248.13 MB
