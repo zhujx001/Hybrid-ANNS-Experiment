@@ -82,13 +82,13 @@ def run_ung_commands(dataset, basic_id, query_id, scenario_b,scenario_s):
 def main():
     # Step 1: Run GT generation shell script
     print("🟡 Running groundtruth generation script (run_gt.sh)...")
-    # subprocess.run(["bash", "run_gt.sh"], check=True)
+    subprocess.run(["bash", "run_gt.sh"], check=True)
 
     # Step 2: Continue with indexing and searching
     # Loop over datasets and execute commands for both equality and containment scenarios
-    # for dataset in datasets:
-    #     for basic_id, query_id in zip(basic_ids, query_ids):
-    #         run_ung_commands(dataset, basic_id, query_id, "equality","equality")
+    for dataset in datasets:
+        for basic_id, query_id in zip(basic_ids, query_ids):
+            run_ung_commands(dataset, basic_id, query_id, "equality","equality")
     for dataset in datasets:
         for basic_id, query_id in zip(basic_ids_2, query_ids_2):
             run_ung_commands(dataset, basic_id, query_id, "general","containment")

@@ -5,7 +5,7 @@
 ## 📦 Dataset Download
 
 Datasets used in the experiments can be downloaded from the following link:  
-👉 *[Insert dataset download link here]*
+👉 *[https://drive.google.com/file/d/1eYBPsOP9JJd7zVjpXUFnWhNIGfw-FZid/view?usp=drive_link]*
 
 > ⚠️ After downloading, **make sure to place the extracted files in the following directories**:
 > 

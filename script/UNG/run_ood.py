@@ -1,7 +1,6 @@
 import subprocess
 import os
 
-# 公共路径前缀
 base_dir = "/data/HybridANNS/data/Experiment"
 labelfilter_dir = os.path.join(base_dir, "labelfilterData/datasets/text2image")
 label_dir =os.path.join(base_dir, "labelfilterData/labels/text2image")
@@ -10,14 +9,12 @@ ung_index_dir = os.path.join(base_dir, "temp/UNG-ood/index/text2image")
 ung_result_dir = os.path.join(base_dir, "temp/UNG-ood/result/text2image")
 gt_output_dir = os.path.join(base_dir, "temp/UNG-ood/gt")
 
-# 公共文件路径
 base_bin_file = os.path.join(labelfilter_dir, "text2image_base.fbin")
 query_bin_file = os.path.join(labelfilter_dir, "text2image_query.fbin")
 base_label_file = os.path.join(label_dir, "ung_label_1.txt")
 query_label_file = os.path.join(query_label_dir, "ung_1.txt")
 gt_file = os.path.join(gt_output_dir, "text2image.bin")
 
-# 网格搜索参数
 # num_cross_edges = ["1", "2", "6", "12"]
 # num_entry_points_list = ["2", "4", "6", "8", "12", "24", "72", "128"]
 num_cross_edges = ["6"]

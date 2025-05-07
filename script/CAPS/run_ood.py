@@ -12,20 +12,18 @@
 import os
 import subprocess
 
-# 自动推导根路径
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPERIMENT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data/Experiment"))
 CAPS_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../algorithm/CAPS"))
 TEMP_DIR = os.path.abspath(os.path.join(EXPERIMENT_ROOT, "../../data/Experiment/temp/CAPS/"))
 
-# 数据集列表
+
 
 dataset = "text2image"
 
-# nprobe 值（500~30000 步长 500）
 nprobe_values = [str(i) for i in range(500, 30500, 500)]
 
-# 可执行文件路径
 INDEX_EXEC = os.path.join(CAPS_DIR, "index")
 QUERY_EXEC = os.path.join(CAPS_DIR, "query")
 
@@ -51,12 +49,12 @@ def run_commands(dataset):
     gt_path = os.path.join(EXPERIMENT_ROOT, "labelfilterData/gt", dataset, f"gt-query_set_1.ivecs")
     result_path = os.path.join(TEMP_DIR, "result", f"{dataset}_1")
     os.makedirs(result_path, exist_ok=True) 
-        # 构建索引
+       
     subprocess.run([
         INDEX_EXEC, base_path, base_attr, index_path, "1024", "kmeans", "3"
     ], check=True)
 
-    # 单线程查询
+    
     for nprobe in nprobe_values:
         subprocess.run([
             QUERY_EXEC, base_path, base_attr, query_data, query_attr,

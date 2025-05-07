@@ -1,35 +1,33 @@
 import os
 import subprocess
 
-# 获取当前脚本目录
 base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
 
-# 定义统一路径变量
-# 直接使用绝对路径
+
 labelfilter_data = "/data/HybridANNS/data/Experiment/labelfilterData"
 stitched_temp = "/data/HybridANNS/data/Experiment/temp/stitched_ood"
 filtered_temp = "/data/HybridANNS/data/Experiment/temp/filtered_ood"
-# 参数配置
+
 K = 10
 alpha = 1.2 
 T_s = 1 
 T_m = 16
 T_b = 32
 
-# filtered 参数
+# filtered 
 R_e = 128
 L_e = 180
 
-# stitched 参数
+# stitched 
 s_R_e = 48
 s_L_e = 200
 s_SR_e = 96
 
-# 查询的 L 值列表
+
 L_values_e = [10, 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550,600, 650, 700, 750, 800, 850, 900, 950, 1000,1100,1200,1300,1400,3000]
 
 def run_commands(): 
-    # ============ Stitched 构建索引 ============
+    # ============ Stitched  build index============
     index_path = os.path.join(stitched_temp, "index")
     result_path = os.path.join(stitched_temp, "result")
     os.makedirs(index_path, exist_ok=True)
@@ -48,7 +46,7 @@ def run_commands():
         "--label_file", os.path.join(labelfilter_data, "labels/text2image/ung_label_1.txt")
     ], check=True)
 
-    # Stitched 单线程查询
+    # Stitched single thread
     for L in L_values_e:
         subprocess.run([
             "../../algorithm/DiskANN/build/apps/search_memory_index",
@@ -64,7 +62,7 @@ def run_commands():
             "--result_path", os.path.join(result_path, "1_")
         ], check=True)
 
-    # ============ Filtered 构建索引 ============
+    # ============ Filtered build index ============
     index_path = os.path.join(filtered_temp, "index")
     result_path = os.path.join(filtered_temp, "result")
     os.makedirs(index_path, exist_ok=True)
@@ -83,7 +81,7 @@ def run_commands():
         "--label_file", os.path.join(labelfilter_data, "labels/text2image/ung_label_1.txt")
     ], check=True)
 
-    # Filtered 单线程查询
+    # Filtered single thread
     for L in L_values_e:
         subprocess.run([
             "../../algorithm/DiskANN/build/apps/search_memory_index",

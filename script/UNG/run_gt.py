@@ -2,7 +2,6 @@ import os
 import subprocess
 import numpy as np
 import struct
-# === 配置路径 ===
 ROOT_DIR = "/data/HybridANNS/data/Experiment/labelfilterData"
 GT_DIR = "/data/HybridANNS/data/Experiment/temp/UNG/gt"
 GT_TOOL = "../../algorithm/UNG/build/tools/compute_groundtruth"
@@ -18,7 +17,7 @@ os.makedirs(GT_DIR, exist_ok=True)
 
 
 
-# === fvecs to bin 转换 ===
+# === fvecs to bin  ===
 def convert_fvecs_to_bin(fvecs_path, bin_path):
     vectors = []
     dim = None
@@ -42,16 +41,16 @@ def convert_fvecs_to_bin(fvecs_path, bin_path):
     n = vectors_np.shape[0]
 
     with open(bin_path, 'wb') as f:
-        f.write(struct.pack('i', n))       # int32 写 n
-        f.write(struct.pack('i', dim))     # int32 写 dim
-        f.write(vectors_np.tobytes())      # 写所有向量数据
+        f.write(struct.pack('i', n))       
+        f.write(struct.pack('i', dim))     
+        f.write(vectors_np.tobytes())      
 
     print(f"✅ 转换成功: {fvecs_path} → {bin_path} (n={n}, dim={dim})")
 
-# === label 文件转换 ===
+# === label  ===
 def convert_label_file(input_path, output_path):
     with open(input_path, 'r') as f:
-        lines = f.readlines()[1:]  # 跳过第一行
+        lines = f.readlines()[1:]  
     with open(output_path, 'w') as f:
         for line in lines:
             line = line.strip()
@@ -59,11 +58,10 @@ def convert_label_file(input_path, output_path):
                 values = line.split()
                 f.write(','.join(values) + '\n')
 
-# === 构建 GT ===
+# ===  GT ===
 def generate_groundtruth(label_type, base_id, query_id, scenario):
     print(f"\n🚀 Generating GT ({scenario}) for {label_type} | base_id={base_id}, query_id={query_id}")
 
-    # 路径定义
     base_label = os.path.join(ROOT_DIR, "labels", label_type, f"label_{base_id}.txt")
     query_label = os.path.join(ROOT_DIR, "query_label", label_type, f"{query_id}.txt")
     new_base_label = os.path.join(ROOT_DIR, "labels", label_type, f"ung_label_{base_id}.txt")
@@ -75,13 +73,13 @@ def generate_groundtruth(label_type, base_id, query_id, scenario):
     query_bin = os.path.join(ROOT_DIR, "datasets", label_type, f"{label_type}_query.bin")
     gt_file = os.path.join(GT_DIR, f"{label_type}_{query_id}.bin")
 
-    # 转换 fvecs
+    #  fvecs
     if not os.path.exists(base_bin) and os.path.exists(base_fvecs):
         convert_fvecs_to_bin(base_fvecs, base_bin)
     if not os.path.exists(query_bin) and os.path.exists(query_fvecs):
         convert_fvecs_to_bin(query_fvecs, query_bin)
 
-    # 转换 label
+    #  label
     if os.path.exists(base_label):
         convert_label_file(base_label, new_base_label)
     else:
@@ -94,7 +92,7 @@ def generate_groundtruth(label_type, base_id, query_id, scenario):
         print(f"❌ Missing query label: {query_label}")
         return
 
-    # 调用 compute_groundtruth 工具
+    #  compute_groundtruth 
     cmd = [
         GT_TOOL,
         "--data_type", "float",
@@ -110,7 +108,6 @@ def generate_groundtruth(label_type, base_id, query_id, scenario):
     ]
     subprocess.run(cmd, check=True)
 
-# === 主函数 ===
 def main():
     for label_type in LABEL_TYPES:
         for base_id, query_id in zip(BASE_IDS_E, QUERY_IDS_E):

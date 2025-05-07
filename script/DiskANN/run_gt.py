@@ -3,7 +3,6 @@ import struct
 import numpy as np
 from pathlib import Path
 
-# ====== 配置 ======
 root_dir = Path("/data/HybridANNS/data/Experiment/labelfilterData")
 temp_gt_dir = Path("/data/HybridANNS/data/Experiment/temp/diskann/gt")
 utils_dir = Path("../../algorithm/DiskANN/build/apps/utils")
@@ -13,7 +12,7 @@ basic_ids = ["1", "2-1", "2-2", "3-1", "3-2", "3-3", "3-4", "4", "5-1", "5-2", "
 query_ids = ["1", "2_1", "2_2", "3_1", "3_2", "3_3", "3_4", "4", "5_1", "5_2", "5_3", "5_4"]
 
 
-# === fvecs to bin 转换 ===
+# === fvecs to bin ===
 def convert_fvecs_to_bin(fvecs_path, bin_path):
     vectors = []
     dim = None
@@ -37,15 +36,14 @@ def convert_fvecs_to_bin(fvecs_path, bin_path):
     n = vectors_np.shape[0]
 
     with open(bin_path, 'wb') as f:
-        f.write(struct.pack('i', n))       # int32 写 n
-        f.write(struct.pack('i', dim))     # int32 写 dim
-        f.write(vectors_np.tobytes())      # 写所有向量数据
+        f.write(struct.pack('i', n))       
+        f.write(struct.pack('i', dim))     
+        f.write(vectors_np.tobytes())     
 
     print(f"✅ 转换成功: {fvecs_path} → {bin_path} (n={n}, dim={dim})")
-# ====== 遍历 ======
+
 for label_type in label_types:
     for basic_id, query_id in zip(basic_ids, query_ids):
-        # --- 文件路径 ---
         old_base_label_file = root_dir / "labels" / label_type / f"label_{basic_id}.txt"
         old_query_label_file = root_dir / "query_label" / label_type / f"{query_id}.txt"
         new_base_label_file = root_dir / "labels" / label_type / f"diskann_label_{basic_id}.txt"
@@ -59,7 +57,7 @@ for label_type in label_types:
 
         gt_file = temp_gt_dir / f"{label_type}_{query_id}.bin"
 
-        # --- fvecs 转 bin ---
+        # --- fvecs to bin ---
         if not base_bin_file.exists():
             print(f"🔁 Converting {base_fvecs} to {base_bin_file} ...")
             convert_fvecs_to_bin(str(base_fvecs), str(base_bin_file))
@@ -67,10 +65,10 @@ for label_type in label_types:
             print(f"🔁 Converting {query_fvecs} to {query_bin_file} ...")
             convert_fvecs_to_bin(str(query_fvecs), str(query_bin_file))
 
-        # --- label 转换（去掉首行 + 用逗号隔开）---
+        # --- label ---
         if old_base_label_file.exists():
             with old_base_label_file.open("r") as fin, new_base_label_file.open("w") as fout:
-                lines = fin.readlines()[1:]  # 跳过首行
+                lines = fin.readlines()[1:]  
                 for line in lines:
                     tokens = line.strip().split()
                     fout.write(",".join(tokens) + "\n")
@@ -80,7 +78,7 @@ for label_type in label_types:
 
         if old_query_label_file.exists():
             with old_query_label_file.open("r") as fin, new_query_label_file.open("w") as fout:
-                lines = fin.readlines()[1:]  # 跳过首行
+                lines = fin.readlines()[1:]  
                 for line in lines:
                     tokens = line.strip().split()
                     fout.write(",".join(tokens) + "\n")
@@ -88,7 +86,7 @@ for label_type in label_types:
             print(f"⚠️ Query label file not found: {old_query_label_file}")
             continue
 
-        # --- 构建 groundtruth ---
+        # ---  groundtruth ---
         print(f"🚀 Generating groundtruth for {label_type} / {query_id} ...")
         subprocess.run([
             str(utils_dir / "compute_groundtruth_for_filters"),

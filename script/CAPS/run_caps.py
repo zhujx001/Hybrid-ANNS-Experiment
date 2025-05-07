@@ -1,25 +1,25 @@
 import os
 import subprocess
 
-# 自动推导根路径
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPERIMENT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data/Experiment"))
 CAPS_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../algorithm/CAPS"))
 TEMP_DIR = os.path.abspath(os.path.join(EXPERIMENT_ROOT, "../../data/Experiment/temp/CAPS/"))
 
-# 数据集列表
+
 datasets = ["audio", "sift", "gist", "glove-100", "msong", "enron"]
 
-# 属性 ID 列表（用于 basic_id 和 query_id）
+
 basic_ids_e = ["1", "3-1", "3-2", "3-3", "3-4", "4", "5-1", "5-2", "5-3", "5-4", "6"]
 query_ids_e = ["1", "3_1", "3_2", "3_3", "3_4", "4", "5_1", "5_2", "5_3", "5_4", "6"]
 
 basic_ids_c=["2-1","2-2"]
 query_ids_c=["2_1","2_2"]
-# nprobe 值（500~30000 步长 500）
+
 nprobe_values = [str(i) for i in range(500, 30500, 500)]
 
-# 可执行文件路径
+
 INDEX_EXEC = os.path.join(CAPS_DIR, "index")
 QUERY_EXEC = os.path.join(CAPS_DIR, "query")
 
@@ -48,19 +48,19 @@ def run_commands_e(dataset):
         gt_path = os.path.join(EXPERIMENT_ROOT, "labelfilterData/gt", dataset, f"gt-query_set_{query_id}.ivecs")
         result_path = os.path.join(TEMP_DIR, "result", f"{dataset}_{query_id}")
         os.makedirs(result_path, exist_ok=True) 
-        # 构建索引
+       
         subprocess.run([
             INDEX_EXEC, base_path, base_attr, index_path, "1024", "kmeans", "3"
         ], check=True)
 
-        # 单线程查询
+        
         for nprobe in nprobe_values:
             subprocess.run([
                 QUERY_EXEC, base_path, base_attr, query_data, query_attr,
                 index_path, gt_path, "1024", "kmeans", "3", nprobe, "1", dataset, result_path
             ], check=True)
 
-        # 多线程查询
+     
         for nprobe in nprobe_values:
             print(f"[🚀 Multi Thread] nprobe={nprobe}")
             subprocess.run([
@@ -83,20 +83,20 @@ def run_commands_c(dataset):
         gt_path = os.path.join(EXPERIMENT_ROOT, "labelfilterData/gt", dataset, f"gt-query_set_{query_id}.ivecs")
         result_path = os.path.join(TEMP_DIR, "result", f"{dataset}_{query_id}")
         os.makedirs(result_path, exist_ok=True)  
-        # 构建索引
+       
         subprocess.run([
             INDEX_EXEC, base_path, base_attr, index_path, "1024", "kmeans", "3"
         ], check=True)
         
         
-        # 单线程查询
+      
         for nprobe in nprobe_values:
             subprocess.run([ 
                 QUERY_EXEC, base_path, base_attr, query_data, query_attr,
                 index_path, gt_path, "1024", "kmeans", "3", nprobe, "1", dataset, result_path
             ], check=True)
 
-        # 多线程查询
+        
         for nprobe in nprobe_values:
             print(f"[🚀 Multi Thread] nprobe={nprobe}")
             subprocess.run([
